@@ -1,16 +1,18 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
-import { Outlet } from 'react-router'
-import Footer from '../components/Footer'
+import React from "react";
+import Navbar from "../components/Navbar";
+import { Outlet } from "react-router";
+import Footer from "../components/Footer";
 
 function MainLayout() {
   return (
-    <div>
-        <Navbar/>
-        <Outlet/>
-        <Footer/>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="flex-1 overflow-y-auto">
+        <Outlet />
+      </div>
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default MainLayout
+export default MainLayout;

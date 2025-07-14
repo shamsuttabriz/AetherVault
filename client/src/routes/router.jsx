@@ -4,10 +4,10 @@ import Home from "../pages/Home";
 import AllArtifacts from "../pages/AllArtifacts";
 import AddArtifacts from "../pages/AddArtifacts";
 import Login from "../pages/Login";
-import Registration from "../pages/Registration";
 import Profile from "../pages/Profile";
 import MyArtifacts from "../pages/MyArtifacts";
 import LikedArtifacts from "../pages/LikedArtifacts";
+import Register from "../pages/Register";
 
 
 const router = createBrowserRouter([
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'register',
-        element: <Registration/>,
+        element: <Register/>,
       },
       {
         path: 'profile',
