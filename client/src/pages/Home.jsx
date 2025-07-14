@@ -1,12 +1,12 @@
 import React from "react";
 import Slider from "../components/Slider";
-import Features from "../components/Features";
+import FeaturedArtifacts from "../components/FeaturedArtifacts";
 
 function Home() {
   return (
     <div>
       <Slider />
-      <Features />
+      <FeaturedArtifacts />
     </div>
   );
 }
