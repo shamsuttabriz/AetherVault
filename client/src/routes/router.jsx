@@ -8,7 +8,7 @@ import Profile from "../pages/Profile";
 import MyArtifacts from "../pages/MyArtifacts";
 import LikedArtifacts from "../pages/LikedArtifacts";
 import Register from "../pages/Register";
-
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -20,33 +20,49 @@ const router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: 'all-artifacts',
+        path: "all-artifacts",
         Component: AllArtifacts,
       },
       {
-        path: 'add-artifacts',
-        element: <AddArtifacts/>,
+        path: "add-artifacts",
+        element: (
+          <PrivateRoute>
+            <AddArtifacts />
+          </PrivateRoute>
+        ),
       },
       {
-        path: 'login',
-        element: <Login/>,
+        path: "login",
+        element: <Login />,
       },
       {
-        path: 'register',
-        element: <Register/>,
+        path: "register",
+        element: <Register />,
       },
       {
-        path: 'profile',
-        element: <Profile/>
+        path: "profile",
+        element: (
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        ),
       },
       {
-        path: 'my-artifacts',
-        element: <MyArtifacts/>,
+        path: "my-artifacts",
+        element: (
+          <PrivateRoute>
+            <MyArtifacts />
+          </PrivateRoute>
+        ),
       },
       {
-        path: 'liked-artifacts',
-        element: <LikedArtifacts/>,
-      }
+        path: "liked-artifacts",
+        element: (
+          <PrivateRoute>
+            <LikedArtifacts />
+          </PrivateRoute>
+        ),
+      },
     ],
   },
 ]);

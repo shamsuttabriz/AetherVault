@@ -1,8 +1,12 @@
-import React from "react";
+import React, { use } from "react";
 import Swal from "sweetalert2";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Register = () => {
+  const { createUser, updateUser, setUser } = use(AuthContext);
+  const navigate = useNavigate();
+
   const validatePassword = (password) => {
     const errors = [];
     if (!/[A-Z]/.test(password))
@@ -12,16 +16,43 @@ const Register = () => {
     return errors;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     const form = e.target;
-    const { name, email, photoURL, password } = form;
-
+    const formData = new FormData(form);
+    const { email, password, name, photo } = Object.fromEntries(
+      formData.entries()
+    );
+    console.log(email, password, name, photo);
+    // Password validity
     const validationErrors = validatePassword(password);
     if (validationErrors.length > 0) {
       Swal.fire("Error", validationErrors.join("<br>"), "error");
       return;
     }
+
+    // create user in the firebase
+    createUser(email, password)
+      .then((result) => {
+        console.log(result.user);
+        updateUser({ displayName: name, photoURL: photo })
+          .then(() => {
+            setUser({ ...result?.user, displayName: name, photoURL: photo });
+            Swal.fire({
+              icon: "success",
+              title: "Your account is created.",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            navigate("/");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -30,7 +61,7 @@ const Register = () => {
         <h2 className="text-2xl font-bold text-indigo-700 mb-6 text-center">
           Create an Account
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSignUp} className="space-y-4">
           <input
             type="text"
             name="name"

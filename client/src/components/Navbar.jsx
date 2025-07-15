@@ -1,7 +1,12 @@
-import React from "react";
-import { Link, NavLink } from "react-router";
+import React, { use } from "react";
+import { Link, NavLink, useNavigate } from "react-router";
+import { AuthContext } from "../contexts/AuthContext";
 
 function Navbar() {
+  const { user, logOutUser } = use(AuthContext);
+  const navigate = useNavigate();
+  console.log(user?.photoURL);
+
   const links = (
     <>
       <li>
@@ -10,24 +15,28 @@ function Navbar() {
       <li>
         <NavLink to="/all-artifacts">All Artifacs</NavLink>
       </li>
-      <li>
-        <NavLink to="/add-artifacts">Add Artifacts</NavLink>
-      </li>
-      <li>
-        <NavLink to="/my-artifacts">My Artifacts</NavLink>
-      </li>
-      <li>
-        <NavLink to="/liked-artifacts">Liked Artifacts</NavLink>
-      </li>
-      <li>
-        <NavLink to="/login">Login</NavLink>
-      </li>
-      <li>
-        <NavLink to="/register">Register</NavLink>
-      </li>
-      <li>
-        <NavLink to="/profile">Profile</NavLink>
-      </li>
+      {user ? (
+        <>
+          <li>
+            <NavLink to="/add-artifacts">Add Artifacts</NavLink>
+          </li>
+          <li>
+            <NavLink to="/my-artifacts">My Artifacts</NavLink>
+          </li>
+          <li>
+            <NavLink to="/liked-artifacts">Liked Artifacts</NavLink>
+          </li>
+        </>
+      ) : (
+        <>
+          <li>
+            <NavLink to="/login">Login</NavLink>
+          </li>
+          <li>
+            <NavLink to="/register">Register</NavLink>
+          </li>
+        </>
+      )}
     </>
   );
   return (
@@ -58,13 +67,44 @@ function Navbar() {
             {links}
           </ul>
         </div>
-        <Link to="/" className="flex items-center gap-1 font-bold text-lg lg:text-xl">Aether <span><img className="w-8 lg:w-10" src="https://i.ibb.co/39sz9s47/camera.png" alt="" /></span> Vault</Link>
+        <Link
+          to="/"
+          className="flex items-center gap-1 font-bold text-lg lg:text-xl"
+        >
+          Aether{" "}
+          <span>
+            <img
+              className="w-8 lg:w-10"
+              src="https://i.ibb.co/39sz9s47/camera.png"
+              alt=""
+            />
+          </span>{" "}
+          Vault
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Profile</a>
+        {user && (
+          <div className="flex gap-2">
+            <button className="p-[2px] rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 inline-block cursor-pointer">
+              <img
+                className="w-9 h-8 rounded-full object-cover"
+                src={user?.photoURL}
+                alt="Profile"
+              />
+            </button>
+            <button
+              onClick={() => {
+                logOutUser(), navigate("/");
+              }}
+              className="btn btn-warning"
+            >
+              Logout
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

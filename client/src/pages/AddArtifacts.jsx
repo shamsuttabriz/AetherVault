@@ -9,13 +9,13 @@ const AddArtifacts = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-16">
+    <div className="max-w-7xl mx-auto px-6 mt-12 mb-20">
       {/* Heading and Description */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-center mb-12"
+        className="text-center mb-8"
       >
         <h2 className="text-4xl font-bold text-indigo-700 mb-4">
           Add New Artifact

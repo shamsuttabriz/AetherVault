@@ -1,10 +1,52 @@
-import { Link } from "react-router";
+import { use } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
+import { AuthContext } from "../contexts/AuthContext";
+import Swal from "sweetalert2";
 
 const Login = () => {
+  const {signInUser, googleSignIn, setUser} = use(AuthContext);
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  // Login with Email and Password
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Login In");
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+  
+    signInUser(email, password)
+    .then(res => {
+      console.log(res.user);
+      Swal.fire({
+        icon: 'success',
+        title: 'Login Successful!',
+        showConfirmButton: false,
+        timer: 1500,
+      })
+      navigate(`${location.state ? location.state : '/'}`)
+    })
+    .catch(err => {
+      console.log(err);
+    })
   };
+
+  // Login with Google
+  const handleGoogleLogin = () => {
+    googleSignIn()
+    .then(res => {
+      setUser(res?.user);
+      Swal.fire({
+        icon: "success",
+        title: "Login Google",
+        text: "Your account has been successfully logedin!",
+      });
+      navigate(location?.state || "/");
+    })
+    .catch(err => {
+      console.log(err.message);
+    })
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-indigo-200 flex justify-center items-center">
@@ -15,12 +57,14 @@ const Login = () => {
         <form onSubmit={handleLogin} className="space-y-5">
           <input
             type="email"
+            name="email"
             placeholder="Email"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
             required
           />
           <input
             type="password"
+            name="password"
             placeholder="Password"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
             required
@@ -35,7 +79,7 @@ const Login = () => {
 
         <div className="text-center my-4 text-gray-500">or</div>
 
-        <button className="w-full py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition cursor-pointer">
+        <button onClick={handleGoogleLogin} className="w-full py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition cursor-pointer">
           Continue with Google
         </button>
 

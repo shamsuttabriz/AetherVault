@@ -95,7 +95,7 @@ const FeaturedArtifacts = () => {
           Featured Artifacts
         </h2>
         <p className="px-10 text-lg text-gray-700">
-          Decoded ancient scripts; key to understanding Egyptian hieroglyphs and
+          Decoded ancient scripts key to understanding Egyptian hieroglyphs and
           history
         </p>
       </motion.div>
