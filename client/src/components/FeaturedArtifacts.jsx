@@ -1,5 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router";
+import { motion } from "framer-motion";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.15, duration: 0.6 },
+  }),
+};
 
 const FeaturedArtifacts = () => {
   const navigate = useNavigate();
@@ -73,55 +83,77 @@ const FeaturedArtifacts = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
-      <div className="text-center py-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-black mb-2">
+      {/* Title Section with Animation */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        className="text-center py-10"
+      >
+        <h2 className="text-3xl md:text-4xl font-bold text-indigo-700 mb-3">
           Featured Artifacts
         </h2>
-        <p className="px-10 text-gray-700">
+        <p className="px-10 text-lg text-gray-700">
           Decoded ancient scripts; key to understanding Egyptian hieroglyphs and
           history
         </p>
-      </div>
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {artifacts.map((artifact) => (
-          <div
-            key={artifact._id}
-            className="bg-black rounded-xl shadow-md hover:shadow-lg transition p-5 flex flex-col"
+      </motion.div>
+
+      {/* Cards with motion */}
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+        {artifacts.slice(0, 6).map((artifact, index) => (
+          <motion.div
+            key={artifact.id}
+            custom={index}
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            whileHover={{ scale: 1.03 }}
+            className="bg-indigo-50 rounded-xl shadow-md p-5 flex flex-col cursor-pointer"
           >
             <img
               src={artifact.image}
               alt={artifact.name}
-              className="rounded-lg h-48 w-full object-cover mb-4 border border-warning"
+              className="rounded-lg h-48 w-full object-cover mb-4"
             />
-            <h3 className="text-xl font-semibold text-warning">
+            <h3 className="text-xl font-semibold text-indigo-700">
               {artifact.name}
             </h3>
-            <p className="text-sm text-gray-400 my-2">
+            <p className="text-sm text-gray-600 my-2">
               {artifact.description.slice(0, 80)}...
             </p>
             <div className="mt-auto flex items-center justify-between">
-              <span className="text-sm text-gray-300">
+              <span className="text-sm text-gray-700">
                 ❤️ {artifact.likeCount}
               </span>
               <button
-                onClick={() => navigate(`/artifacts/${artifact._id}`)}
-                className="text-sm bg-warning text-black px-3 py-1 rounded hover:bg-yellow-500 transition cursor-pointer"
+                onClick={() => navigate(`/artifacts/${artifact.id}`)}
+                className="text-sm bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600 transition"
               >
                 View Details
               </button>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
-      <div className="mt-8 text-center">
+      {/* See All Button */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.6 }}
+        viewport={{ once: true }}
+        className="mt-8 text-center"
+      >
         <button
           onClick={() => navigate("/all-artifacts")}
           className="bg-indigo-500 hover:bg-indigo-600 text-white font-medium px-6 py-2 rounded-full"
         >
           See All Artifacts
         </button>
-      </div>
+      </motion.div>
     </div>
   );
 };
