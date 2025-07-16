@@ -23,6 +23,11 @@ async function run() {
     const database = client.db('artifactsdb');
     const artifactsCollection = database.collection("artifacts");
 
+    app.get('/artifacts', async (req, res) => {
+      const allArtifacts = await artifactsCollection.find().toArray();
+      res.send(allArtifacts);
+    })
+
     // save a artifact data in database through post request
     app.post('/add-artifact', async (req, res) => {
       const artifactData = req?.body;

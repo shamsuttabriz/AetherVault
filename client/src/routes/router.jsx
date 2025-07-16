@@ -9,6 +9,7 @@ import MyArtifacts from "../pages/MyArtifacts";
 import LikedArtifacts from "../pages/LikedArtifacts";
 import Register from "../pages/Register";
 import PrivateRoute from "./PrivateRoute";
+import axios from "axios";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,8 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        hydrateFallbackElement: <p>Loading..</p>,
+        loader: () => axios(`${import.meta.env.VITE_API_URL}/artifacts`),
         Component: Home,
       },
       {
