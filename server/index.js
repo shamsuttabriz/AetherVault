@@ -20,6 +20,16 @@ const client = new MongoClient(process.env.MONGODB_URL, {
 async function run() {
   try {
 
+    const database = client.db('artifactsdb');
+    const artifactsCollection = database.collection("artifacts");
+
+    // save a artifact data in database through post request
+    app.post('/add-artifact', async (req, res) => {
+      const artifactData = req?.body;
+      const result = await artifactsCollection.insertOne(artifactData);
+      console.log("This is result: ", result);
+      res.status(201).send({...result, message: "Data Paichi vai, Thanks"});
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });

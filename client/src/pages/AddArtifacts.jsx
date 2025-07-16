@@ -1,11 +1,37 @@
-import React from "react";
+import React, { use } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
 import { motion } from "framer-motion";
+import { AuthContext } from "../contexts/AuthContext";
+import {useNavigate} from "react-router"
 
 const AddArtifacts = () => {
+  const navigate = useNavigate();
+  const { user } = use(AuthContext);
+  console.log(user);
   const handleSubmit = (e) => {
     e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const newArtifact = Object.fromEntries(formData.entries());
+    newArtifact.email = user.email;
+    newArtifact.likedBy = [];
 
-    console.log("Artifact Submitted:", e.target);
+    // Save coffee data
+    axios
+      .post(`${import.meta.env.VITE_API_URL}/add-artifact`, newArtifact)
+      .then((data) => {
+        console.log(data.data);
+        Swal.fire({
+          title: "Good job",
+          text: "Data Added Successfully",
+          icon: "success",
+        })
+        navigate('/');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -161,7 +187,7 @@ const AddArtifacts = () => {
             </label>
             <input
               type="text"
-              value="Unknown"
+              value={user?.displayName}
               readOnly
               className="w-full bg-gray-100 border border-gray-300 rounded px-4 py-2"
             />
@@ -174,7 +200,7 @@ const AddArtifacts = () => {
             </label>
             <input
               type="email"
-              value="Not logged in"
+              value={user?.email}
               readOnly
               className="w-full bg-gray-100 border border-gray-300 rounded px-4 py-2"
             />
