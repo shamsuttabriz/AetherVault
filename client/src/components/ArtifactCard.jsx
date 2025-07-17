@@ -9,7 +9,7 @@ const ArtifactCard = ({ artifact }) => {
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
       transition={{ duration: 0.7, ease: "easeOut" }}
-      className="flex flex-col md:flex-row items-center bg-white dark:bg-slate-900 h-48 border border-neutral-300 dark:border-neutral-700 rounded shadow-md overflow-hidden transition-all"
+      className="flex flex-col md:flex-row items-center bg-white dark:bg-slate-900 h-56 border border-neutral-300 dark:border-neutral-700 rounded shadow-md overflow-hidden transition-all"
     >
       <motion.img
         src={artifact.image}
@@ -29,6 +29,9 @@ const ArtifactCard = ({ artifact }) => {
         <h2 className="text-lg font-bold text-neutral-800 dark:text-white">
           {artifact.name}
         </h2>
+        <p className="text-sm text-neutral-600 dark:text-neutral-300">
+          Liked: {artifact.likedBy.length}
+        </p>
         <p className="text-sm text-neutral-600 dark:text-neutral-300">
           Type: {artifact.type}
         </p>

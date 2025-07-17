@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useLoaderData, useNavigate } from "react-router";
 import { motion } from "framer-motion";
 
@@ -128,7 +128,7 @@ const FeaturedArtifacts = () => {
             </p>
             <div className="mt-auto flex items-center justify-between">
               <span className="text-sm font-bold text-gray-700">
-                ❤️ {artifact.likedBy.length}
+              Created: {artifact.createdAt}
               </span>
               <button
                 onClick={() => navigate(`/artifacts/${artifact.id}`)}

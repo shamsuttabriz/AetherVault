@@ -32,7 +32,7 @@ async function run() {
       const id = req.params.id;
       const filter = {_id: new ObjectId(id)};
       const artifact = await artifactsCollection.findOne(filter);
-      console.log(artifact);
+      // console.log(artifact);
       res.send(artifact);
     })
 
@@ -43,6 +43,37 @@ async function run() {
       console.log("This is result: ", result);
       res.status(201).send({...result, message: "Data Paichi vai, Thanks"});
     })
+
+    // handle like toggle
+    app.patch("/like/:artifactId", async (req, res) => {
+      const id = req.params.artifactId;
+      const email = req.body.email;
+      console.log(email);
+      const filter = { _id: new ObjectId(id) };
+      const artifact = await artifactsCollection.findOne(filter);
+      console.log(artifact);
+      // check if the user has already liked the artifact or not;
+      const alreadyLiked = artifact?.likedBy?.includes(email);
+      console.log(alreadyLiked);
+      const updateDoc = alreadyLiked
+        ? {
+            $pull: {
+              // dislike artifact (pop email from likeBy array)
+              likedBy: email,
+            },
+          }
+        : {
+            $addToSet: {
+              // Like artifact (push email in likeBy array)
+              likedBy: email,
+            },
+          };
+      await artifactsCollection.updateOne(filter, updateDoc);
+      res.send({
+        message: alreadyLiked ? "Dislike Successfull" : "Like Successful",
+        liked: !alreadyLiked,
+      });
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });

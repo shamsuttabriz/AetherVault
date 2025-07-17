@@ -31,7 +31,9 @@ const router = createBrowserRouter([
         Component: AllArtifacts,
       },
       {
-        path: "artifact-detail",
+        path: "artifact-detail/:id",
+        hydrateFallbackElement: <Loading />,
+        loader: ({params}) => axios(`${import.meta.env.VITE_API_URL}/artifact-detail/${params.id}`),
         element: (
           <PrivateRoute>
             <ArtifactsDetails />

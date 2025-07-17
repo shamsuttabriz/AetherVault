@@ -60,7 +60,7 @@ function Navbar() {
   };
 
   return (
-    <div className="navbar bg-indigo-50 shadow-sm">
+    <div className="navbar bg-indigo-50 md:px-10 shadow-sm">
       <div className="navbar-start">
         <div className="dropdown cursor-pointer mr-2">
           <div tabIndex={0} role="button" className="lg:hidden">
