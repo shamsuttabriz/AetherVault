@@ -1,7 +1,7 @@
 const express = require("express");
 require("dotenv").config({ quiet: true });
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -26,6 +26,14 @@ async function run() {
     app.get('/artifacts', async (req, res) => {
       const allArtifacts = await artifactsCollection.find().toArray();
       res.send(allArtifacts);
+    })
+
+    app.get('/artifact-detail/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)};
+      const artifact = await artifactsCollection.findOne(filter);
+      console.log(artifact);
+      res.send(artifact);
     })
 
     // save a artifact data in database through post request

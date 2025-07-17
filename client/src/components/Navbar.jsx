@@ -5,7 +5,7 @@ import { AuthContext } from "../contexts/AuthContext";
 function Navbar() {
   const { user, logOutUser } = use(AuthContext);
   const navigate = useNavigate();
-  console.log(user?.photoURL);
+  // console.log(user?.photoURL);
 
   const navLinkClass = ({ isActive }) =>
     isActive

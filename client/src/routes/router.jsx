@@ -10,6 +10,8 @@ import LikedArtifacts from "../pages/LikedArtifacts";
 import Register from "../pages/Register";
 import PrivateRoute from "./PrivateRoute";
 import axios from "axios";
+import Loading from "../components/Loading";
+import ArtifactsDetails from "../pages/ArtifactsDetails";
 
 const router = createBrowserRouter([
   {
@@ -18,13 +20,23 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        hydrateFallbackElement: <p>Loading..</p>,
+        hydrateFallbackElement: <Loading />,
         loader: () => axios(`${import.meta.env.VITE_API_URL}/artifacts`),
         Component: Home,
       },
       {
         path: "all-artifacts",
+        hydrateFallbackElement: <Loading />,
+        loader: () => axios(`${import.meta.env.VITE_API_URL}/artifacts`),
         Component: AllArtifacts,
+      },
+      {
+        path: "artifact-detail",
+        element: (
+          <PrivateRoute>
+            <ArtifactsDetails />
+          </PrivateRoute>
+        ),
       },
       {
         path: "add-artifacts",

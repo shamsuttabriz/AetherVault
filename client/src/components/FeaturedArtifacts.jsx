@@ -132,7 +132,7 @@ const FeaturedArtifacts = () => {
               </span>
               <button
                 onClick={() => navigate(`/artifacts/${artifact.id}`)}
-                className="text-sm bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600 transition"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded text-sm hover:from-indigo-700 hover:to-purple-700 cursor-pointer px-3 py-1 transition"
               >
                 View Details
               </button>
@@ -151,7 +151,7 @@ const FeaturedArtifacts = () => {
       >
         <button
           onClick={() => navigate("/all-artifacts")}
-          className="bg-indigo-500 hover:bg-indigo-600 text-white font-medium px-6 py-2 rounded-full"
+          className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded text-base hover:from-indigo-700 hover:to-purple-700 cursor-pointer font-medium px-6 py-2"
         >
           See All Artifacts
         </button>
