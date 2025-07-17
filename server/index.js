@@ -1,7 +1,7 @@
 const express = require("express");
 require("dotenv").config({ quiet: true });
 const cors = require("cors");
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -14,47 +14,81 @@ const client = new MongoClient(process.env.MONGODB_URL, {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
 });
 
 async function run() {
   try {
-
-    const database = client.db('artifactsdb');
+    const database = client.db("artifactsdb");
     const artifactsCollection = database.collection("artifacts");
 
-    app.get('/artifacts', async (req, res) => {
+    app.get("/artifacts", async (req, res) => {
       const allArtifacts = await artifactsCollection.find().toArray();
       res.send(allArtifacts);
-    })
+    });
 
-    app.get('/artifact-detail/:id', async (req, res) => {
+    app.get("/artifact-detail/:id", async (req, res) => {
       const id = req.params.id;
-      const filter = {_id: new ObjectId(id)};
+      const filter = { _id: new ObjectId(id) };
       const artifact = await artifactsCollection.findOne(filter);
       // console.log(artifact);
       res.send(artifact);
-    })
+    });
 
     // save a artifact data in database through post request
-    app.post('/add-artifact', async (req, res) => {
+    app.post("/add-artifact", async (req, res) => {
       const artifactData = req?.body;
       const result = await artifactsCollection.insertOne(artifactData);
-      console.log("This is result: ", result);
-      res.status(201).send({...result, message: "Data Paichi vai, Thanks"});
-    })
+      // console.log("This is result: ", result);
+      res.status(201).send({ ...result, message: "Data Paichi vai, Thanks" });
+    });
+
+    // Get artifact by individual user
+    app.get("/my-artifacts/:email", async (req, res) => {
+      const email = req.params.email;
+      const filter = { email };
+      const myArtifacts = await artifactsCollection.find(filter).toArray();
+      // console.log(myArtifacts);
+      res.send(myArtifacts);
+    });
+
+    app.get("/artifacs")
+
+    // saved a updated artifact in database through the put request
+    app.put("/updated-artifact/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log("amar id: ", id);
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+
+      const { _id, ...updatedArtifact } = req.body;
+
+      const updateDoc = {
+        $set: updatedArtifact,
+      };
+
+      const result = await artifactsCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+
+      console.log(result);
+
+      res.send(result);
+    });
 
     // handle like toggle
     app.patch("/like/:artifactId", async (req, res) => {
       const id = req.params.artifactId;
       const email = req.body.email;
-      console.log(email);
+      // console.log(email);
       const filter = { _id: new ObjectId(id) };
       const artifact = await artifactsCollection.findOne(filter);
-      console.log(artifact);
+      // console.log(artifact);
       // check if the user has already liked the artifact or not;
       const alreadyLiked = artifact?.likedBy?.includes(email);
-      console.log(alreadyLiked);
+      // console.log(alreadyLiked);
       const updateDoc = alreadyLiked
         ? {
             $pull: {
@@ -77,7 +111,9 @@ async function run() {
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    );
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();

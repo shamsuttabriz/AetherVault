@@ -28,11 +28,11 @@ function Navbar() {
         <>
           <li>
             <NavLink className={navLinkClass} to="/add-artifacts">
-              Add Artifacts
+              Add Artifact
             </NavLink>
           </li>
           <li>
-            <NavLink className={navLinkClass} to="/my-artifacts">
+            <NavLink className={navLinkClass} to={`/my-artifacts/${user?.email}`}>
               My Artifacts
             </NavLink>
           </li>

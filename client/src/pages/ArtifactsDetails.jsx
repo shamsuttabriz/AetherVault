@@ -115,7 +115,7 @@ const ArtifactDetails = () => {
           </p>
           <button
               onClick={handleLike}
-            className=" py-2 block text-center w-24 bg-amber-200 rounded-full transition cursor-pointer"
+            className=" py-2 block text-center w-24 bg-indigo-50 rounded-full transition cursor-pointer"
           >
             {liked ? (
               <span className="flex gap-2 text-sm font-semibold justify-center items-center text-red-500">

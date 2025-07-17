@@ -12,6 +12,7 @@ import PrivateRoute from "./PrivateRoute";
 import axios from "axios";
 import Loading from "../components/Loading";
 import ArtifactsDetails from "../pages/ArtifactsDetails";
+import UpdatedArtifact from "../pages/UpdatedArtifact";
 
 const router = createBrowserRouter([
   {
@@ -31,9 +32,20 @@ const router = createBrowserRouter([
         Component: AllArtifacts,
       },
       {
+        path: "update-artifact/:id",
+        hydrateFallbackElement: <Loading/>,
+        loader: ({params}) => axios(`${import.meta.env.VITE_API_URL}/artifact-detail/${params.id}`),
+        element: (
+          <PrivateRoute>
+            <UpdatedArtifact />
+          </PrivateRoute>
+        ),
+      },
+      {
         path: "artifact-detail/:id",
         hydrateFallbackElement: <Loading />,
-        loader: ({params}) => axios(`${import.meta.env.VITE_API_URL}/artifact-detail/${params.id}`),
+        loader: ({ params }) =>
+          axios(`${import.meta.env.VITE_API_URL}/artifact-detail/${params.id}`),
         element: (
           <PrivateRoute>
             <ArtifactsDetails />
@@ -65,7 +77,10 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "my-artifacts",
+        path: "my-artifacts/:email",
+        hydrateFallbackElement: <Loading />,
+        loader: ({ params }) =>
+          axios(`${import.meta.env.VITE_API_URL}/my-artifacts/${params.email}`),
         element: (
           <PrivateRoute>
             <MyArtifacts />

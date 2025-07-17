@@ -7,7 +7,7 @@ const ArtifactCard = ({ artifact }) => {
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.02, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
+      whileHover={{ scale: 1, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
       transition={{ duration: 0.7, ease: "easeOut" }}
       className="flex flex-col md:flex-row items-center bg-white dark:bg-slate-900 h-56 border border-neutral-300 dark:border-neutral-700 rounded shadow-md overflow-hidden transition-all"
     >
@@ -15,7 +15,7 @@ const ArtifactCard = ({ artifact }) => {
         src={artifact.image}
         alt={artifact.name}
         initial={{ scale: 1 }}
-        whileHover={{ scale: 1.05 }}
+        whileHover={{ scale: 1.03 }}
         transition={{ duration: 0.3 }}
         className="w-full flex-1 md:w-1/2 h-1/2 md:h-64 object-cover"
       />
