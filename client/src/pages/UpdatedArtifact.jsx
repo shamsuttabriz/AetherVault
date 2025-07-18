@@ -1,7 +1,8 @@
 import axios from "axios";
-import React from "react";
+import React, { use } from "react";
 import { useLoaderData, useNavigate } from "react-router";
 import Swal from "sweetalert2";
+import { AuthContext } from "../contexts/AuthContext";
 
 const UpdatedArtifact = () => {
   const { data } = useLoaderData();
@@ -16,6 +17,7 @@ const UpdatedArtifact = () => {
     discoveredAt,
     discoveredBy,
     location,
+    email
   } = data || {};
 
   const handleUpdatePlant = (e) => {
@@ -40,7 +42,7 @@ const UpdatedArtifact = () => {
             showConfirmButton: false,
             timer: 1500,
           });
-          navigate("/all-artifacts");
+          navigate(`/my-artifacts/${email}`);
         }
       })
       .catch((err) => {

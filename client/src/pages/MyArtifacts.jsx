@@ -4,14 +4,18 @@ import { AuthContext } from "../contexts/AuthContext";
 import { useLoaderData } from "react-router";
 import Loading from "../components/Loading";
 import { motion } from "framer-motion";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 const MyArtifacts = () => {
   const data = useLoaderData();
   const { loading } = use(AuthContext);
-  const myArtifacts = data?.data || [];
+  const [myArtifacts, setMyArtifacts] = useState([]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    setMyArtifacts(data?.data || [])
+  }, [data]);
 
   if (loading) {
     return <Loading />;
@@ -32,6 +36,37 @@ const MyArtifacts = () => {
         </Link>
       </div>
     );
+  }
+
+  const handleDelete = (_id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(result => {
+      if(result.isConfirmed) {
+        // Start Deleteting
+        axios.delete(`${import.meta.env.VITE_API_URL}/my-artifacts/${_id}`)
+        .then(res => {
+          console.log("Delete Successfully: ", res.data);
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your Artifact has been deleted.",
+            icon: "success",
+          });
+          // remove the artifact from the state
+          const remainingArtifacts = myArtifacts.filter(artifact => artifact._id !== _id);
+          setMyArtifacts(remainingArtifacts)
+        })
+        .catch(err => {
+          console.log("Client Error: ", err)
+        })
+      }
+    })
   }
 
   return (
@@ -75,12 +110,12 @@ const MyArtifacts = () => {
                 to={`/artifact-detail/${artifact._id}`}
                 className="px-3 py-1 bg-indigo-600 text-sm text-white rounded hover:bg-indigo-700"
               >
-                View Details
+                View
               </Link>
               <Link to={`/update-artifact/${artifact._id}`} className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer">
                 Update
               </Link>
-              <button className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600 cursor-pointer">
+              <button onClick={() => handleDelete(artifact._id)} className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600 cursor-pointer">
                 Delete
               </button>
             </div>

@@ -52,7 +52,7 @@ async function run() {
       res.send(myArtifacts);
     });
 
-    app.get("/artifacs")
+    app.get("/artifacs");
 
     // saved a updated artifact in database through the put request
     app.put("/updated-artifact/:id", async (req, res) => {
@@ -107,6 +107,15 @@ async function run() {
         message: alreadyLiked ? "Dislike Successfull" : "Like Successful",
         liked: !alreadyLiked,
       });
+    });
+
+    // Delete a single artifact from my artifacts
+    app.delete("/my-artifacts/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await artifactsCollection.deleteOne(query);
+      console.log(result);
+      res.send(result);
     });
 
     // Send a ping to confirm a successful connection
