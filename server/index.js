@@ -21,6 +21,7 @@ async function run() {
   try {
     const database = client.db("artifactsdb");
     const artifactsCollection = database.collection("artifacts");
+    const likesCollection = database.collection('likes');
 
     app.get("/artifacts", async (req, res) => {
       const allArtifacts = await artifactsCollection.find().toArray();
@@ -117,6 +118,37 @@ async function run() {
       console.log(result);
       res.send(result);
     });
+
+    // User email and artifact ID are inserted when I click the like button
+    app.post("/like", async (req, res) => {
+      const {artifactdId, userEmail} = req.body;
+
+      // check if already liked 
+      const alreadyLiked = await likesCollection.findOne({artifactId: new ObjectId(artifactdId), userEmail});
+
+      if(alreadyLiked) {
+        return res.status(400).send({message: "Already Liked"})
+      }
+
+      const result = await likesCollection.insertOne({
+        artifactId: new ObjectId(artifactdId),
+        userEmail
+      })
+
+      console.log("Artifact Id & User email: ", result);
+
+      res.send(result);
+
+    })
+    
+    // Retrieve all liked artifacts of a specific user
+    app.get("/liked-artifacts/:email", async (req, res) => {
+      const userEmail = req.params.email;
+      // find all artifacts that mathch those ids
+      const likedArtifacts = await artifactsCollection.find({likedBy: userEmail}).toArray();
+      // console.log("Liked Collections: ", likedArtifacts);
+      res.send(likedArtifacts)
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });

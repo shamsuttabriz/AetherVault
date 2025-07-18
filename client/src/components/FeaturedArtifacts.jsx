@@ -1,5 +1,5 @@
 import React from "react";
-import { useLoaderData, useNavigate } from "react-router";
+import { Link, useLoaderData, useNavigate } from "react-router";
 import { motion } from "framer-motion";
 
 const fadeInUp = {
@@ -128,14 +128,14 @@ const FeaturedArtifacts = () => {
             </p>
             <div className="mt-auto flex items-center justify-between">
               <span className="text-sm font-bold text-gray-700">
-              Created: {artifact.createdAt}
+                Created: {artifact.createdAt}
               </span>
-              <button
-                onClick={() => navigate(`/artifacts/${artifact.id}`)}
+              <Link
+                to={`/artifact-detail/${artifact._id}`}
                 className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded text-sm hover:from-indigo-700 hover:to-purple-700 cursor-pointer px-3 py-1 transition"
               >
                 View Details
-              </button>
+              </Link>
             </div>
           </motion.div>
         ))}
