@@ -15,7 +15,7 @@ const slides = [
     title: "Unlock the Secrets of the Past",
     desc: "Dive deep into mysterious inventions and legendary civilizations.",
     image: "https://i.ibb.co/7dV5Zn9C/Banner-min.jpg",
-    logo: "https://i.ibb.co/0wKFqDQ/Artifacts-World-Logo.png",
+    logo: "https://i.ibb.co/DfhJ0v15/artifact-removebg-preview-1.png",
     button: "Start Your Journey",
   },
   {
@@ -32,7 +32,7 @@ const Slider = () => {
     <div className="w-full">
       <Swiper
         modules={[Autoplay]}
-        autoplay={{ delay: 10000 }}
+        autoplay={{ delay: 5000 }}
         loop={true}
         className="w-full h-[100vh] md:h-[80vh]"
       >

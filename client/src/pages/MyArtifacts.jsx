@@ -12,8 +12,9 @@ import { Helmet } from "react-helmet-async";
 
 const MyArtifacts = () => {
   // const data = useLoaderData();
-  const { user, loading } = use(AuthContext);
+  const { user } = use(AuthContext);
   const [myArtifacts, setMyArtifacts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
@@ -25,6 +26,7 @@ const MyArtifacts = () => {
       .then((data) => {
         console.log(data?.data);
         setMyArtifacts(data?.data);
+        setLoading(false)
       })
       .catch((err) => {
         console.log(err);

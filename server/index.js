@@ -16,7 +16,7 @@ admin.initializeApp({
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://aethervault-136c0.web.app"],
     credentials: true,
   })
 );
@@ -35,7 +35,7 @@ const client = new MongoClient(process.env.MONGODB_URL, {
 // JWT Middleware
 const verifyToken = async (req, res, next) => {
   const token = req?.headers?.authorization?.split(" ")[1];
-  console.log("Take Token: ", token);
+  // console.log("Take Token: ", token);
 
   if(!token) return res.status(401).send({message: "Unauthorized Access!"});
 
@@ -43,7 +43,7 @@ const verifyToken = async (req, res, next) => {
   try {
     const decoded = await admin.auth().verifyIdToken(token);
     req.tokenEmail = decoded.email;
-    console.log(decoded)
+    // console.log(decoded)
     next();
   }
   catch (err) {
@@ -90,7 +90,7 @@ async function run() {
 
       const filter = { email };
       const myArtifacts = await artifactsCollection.find(filter).toArray();
-      console.log(myArtifacts);
+      // console.log(myArtifacts);
       res.send(myArtifacts);
     });
 
@@ -99,7 +99,7 @@ async function run() {
     // saved a updated artifact in database through the put request
     app.put("/updated-artifact/:id", async (req, res) => {
       const id = req.params.id;
-      console.log("amar id: ", id);
+      // console.log("amar id: ", id);
       const filter = { _id: new ObjectId(id) };
       const options = { upsert: true };
 
@@ -115,7 +115,7 @@ async function run() {
         options
       );
 
-      console.log(result);
+      // console.log(result);
 
       res.send(result);
     });
@@ -156,7 +156,7 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await artifactsCollection.deleteOne(query);
-      console.log(result);
+      // console.log(result);
       res.send(result);
     });
 
@@ -179,7 +179,7 @@ async function run() {
         userEmail,
       });
 
-      console.log("Artifact Id & User email: ", result);
+      // console.log("Artifact Id & User email: ", result);
 
       res.send(result);
     });
@@ -196,7 +196,7 @@ async function run() {
     });
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );

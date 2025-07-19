@@ -3,18 +3,26 @@ import { AuthContext } from "../contexts/AuthContext";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import { Helmet } from "react-helmet-async";
+import Loading from "../components/Loading";
 
 function LikedArtifacts() {
   const { user } = use(AuthContext);
   const [likedArtifacts, setLikedArtifacts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/liked-artifacts/${user?.email}`)
       .then((res) => res.json())
-      .then((data) => setLikedArtifacts(data));
+      .then((data) =>{
+        setLikedArtifacts(data)
+        setLoading(false);
+      });
   }, [user]);
 
-  console.log("Amar Liked Artifacts: ", likedArtifacts);
+  if(loading) {
+    return <Loading/>
+  }
+  
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <Helmet>
