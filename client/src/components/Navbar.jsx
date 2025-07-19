@@ -93,8 +93,8 @@ function Navbar() {
           Aether{" "}
           <span>
             <img
-              className="w-8 lg:w-10"
-              src="https://i.ibb.co/39sz9s47/camera.png"
+              className="w-6 md:w-8"
+              src="https://i.ibb.co/DfhJ0v15/artifact-removebg-preview-1.png"
               alt=""
             />
           </span>{" "}

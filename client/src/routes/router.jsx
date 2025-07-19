@@ -33,8 +33,9 @@ const router = createBrowserRouter([
       },
       {
         path: "update-artifact/:id",
-        hydrateFallbackElement: <Loading/>,
-        loader: ({params}) => axios(`${import.meta.env.VITE_API_URL}/artifact-detail/${params.id}`),
+        hydrateFallbackElement: <Loading />,
+        loader: ({ params }) =>
+          axios(`${import.meta.env.VITE_API_URL}/artifact-detail/${params.id}`),
         element: (
           <PrivateRoute>
             <UpdatedArtifact />
@@ -78,9 +79,6 @@ const router = createBrowserRouter([
       },
       {
         path: "my-artifacts/:email",
-        hydrateFallbackElement: <Loading />,
-        loader: ({ params }) =>
-          axios(`${import.meta.env.VITE_API_URL}/my-artifacts/${params.email}`),
         element: (
           <PrivateRoute>
             <MyArtifacts />

@@ -1,12 +1,27 @@
 const express = require("express");
 require("dotenv").config({ quiet: true });
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+var admin = require("firebase-admin");
+const decoded = Buffer.from(process.env.FB_SERVICE_KEY, "base64").toString(
+  "utf-8"
+);
+var serviceAccount = JSON.parse(decoded);
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 const PORT = process.env.PORT || 3000;
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(cookieParser());
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(process.env.MONGODB_URL, {
@@ -17,11 +32,31 @@ const client = new MongoClient(process.env.MONGODB_URL, {
   },
 });
 
+// JWT Middleware
+const verifyToken = async (req, res, next) => {
+  const token = req?.headers?.authorization?.split(" ")[1];
+  console.log("Take Token: ", token);
+
+  if(!token) return res.status(401).send({message: "Unauthorized Access!"});
+
+  // verify token using firebase admin sdk
+  try {
+    const decoded = await admin.auth().verifyIdToken(token);
+    req.tokenEmail = decoded.email;
+    console.log(decoded)
+    next();
+  }
+  catch (err) {
+    console.log(err)
+    return res.status(401).send({ message: "Unauthorized Access!" });
+  }
+}
+
 async function run() {
   try {
     const database = client.db("artifactsdb");
     const artifactsCollection = database.collection("artifacts");
-    const likesCollection = database.collection('likes');
+    const likesCollection = database.collection("likes");
 
     app.get("/artifacts", async (req, res) => {
       const allArtifacts = await artifactsCollection.find().toArray();
@@ -45,11 +80,17 @@ async function run() {
     });
 
     // Get artifact by individual user
-    app.get("/my-artifacts/:email", async (req, res) => {
+    app.get("/my-artifacts/:email", verifyToken, async (req, res) => {
+      const decodedToken = req.tokenEmail;
       const email = req.params.email;
+
+      if(decodedToken !== email) {
+        return res.status(403).send({message: "Forbidden Access!"});
+      }
+
       const filter = { email };
       const myArtifacts = await artifactsCollection.find(filter).toArray();
-      // console.log(myArtifacts);
+      console.log(myArtifacts);
       res.send(myArtifacts);
     });
 
@@ -121,34 +162,38 @@ async function run() {
 
     // User email and artifact ID are inserted when I click the like button
     app.post("/like", async (req, res) => {
-      const {artifactdId, userEmail} = req.body;
+      const { artifactdId, userEmail } = req.body;
 
-      // check if already liked 
-      const alreadyLiked = await likesCollection.findOne({artifactId: new ObjectId(artifactdId), userEmail});
+      // check if already liked
+      const alreadyLiked = await likesCollection.findOne({
+        artifactId: new ObjectId(artifactdId),
+        userEmail,
+      });
 
-      if(alreadyLiked) {
-        return res.status(400).send({message: "Already Liked"})
+      if (alreadyLiked) {
+        return res.status(400).send({ message: "Already Liked" });
       }
 
       const result = await likesCollection.insertOne({
         artifactId: new ObjectId(artifactdId),
-        userEmail
-      })
+        userEmail,
+      });
 
       console.log("Artifact Id & User email: ", result);
 
       res.send(result);
+    });
 
-    })
-    
     // Retrieve all liked artifacts of a specific user
     app.get("/liked-artifacts/:email", async (req, res) => {
       const userEmail = req.params.email;
       // find all artifacts that mathch those ids
-      const likedArtifacts = await artifactsCollection.find({likedBy: userEmail}).toArray();
+      const likedArtifacts = await artifactsCollection
+        .find({ likedBy: userEmail })
+        .toArray();
       // console.log("Liked Collections: ", likedArtifacts);
-      res.send(likedArtifacts)
-    })
+      res.send(likedArtifacts);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
