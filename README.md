@@ -38,17 +38,3 @@ AetherVault is a full-stack web application that allows users to explore, upload
 - MongoDB
 - CORS & JSON Middleware
 
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js
-- MongoDB
-- Firebase account (for Auth & Hosting)
-
-### Frontend Setup
-```bash
-cd client
-npm install
-npm run dev
