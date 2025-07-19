@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { AuthContext } from "../contexts/AuthContext";
 import { FaHeart } from "react-icons/fa";
 import axios from "axios";
+import { Helmet } from "react-helmet-async";
 
 const ArtifactDetails = () => {
   const { user } = use(AuthContext);
@@ -45,6 +46,9 @@ const ArtifactDetails = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
+      <Helmet>
+        <title>AetherVoult | Artifact-Details</title>
+      </Helmet>
       {/* Page Heading */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}

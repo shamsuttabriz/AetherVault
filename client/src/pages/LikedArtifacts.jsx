@@ -1,12 +1,12 @@
 import React, { use, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
+import { Helmet } from "react-helmet-async";
 
 function LikedArtifacts() {
   const { user } = use(AuthContext);
   const [likedArtifacts, setLikedArtifacts] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/liked-artifacts/${user?.email}`)
@@ -17,13 +17,16 @@ function LikedArtifacts() {
   console.log("Amar Liked Artifacts: ", likedArtifacts);
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <Helmet>
+        <title>AetherVoult | Liked-Artifacts</title>
+      </Helmet>
       <motion.h1
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="text-4xl font-bold text-center text-indigo-700 mb-2"
       >
-        All Liked Artifacts
+        Liked Artifacts
       </motion.h1>
 
       <motion.p
@@ -32,7 +35,8 @@ function LikedArtifacts() {
         transition={{ delay: 0.3, duration: 0.6 }}
         className="text-center text-lg text-gray-600 mb-10"
       >
-        Here are all the artifacts you’ve liked. Discover your taste in history and culture.
+        Here are all the artifacts you’ve liked. Discover your taste in history
+        and culture.
       </motion.p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

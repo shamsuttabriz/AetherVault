@@ -3,6 +3,7 @@ import { useLoaderData } from "react-router";
 import ArtifactCard from "../components/ArtifactCard";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { Helmet } from "react-helmet-async";
 
 function AllArtifacts() {
   const { data } = useLoaderData();
@@ -32,6 +33,9 @@ function AllArtifacts() {
 
   return (
     <div className="max-w-7xl mx-auto mb-10">
+      <Helmet>
+        <title>AetherVoult | All-Artifacts</title>
+      </Helmet>
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}

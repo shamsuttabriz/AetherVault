@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import { AuthContext } from "../contexts/AuthContext";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet-async";
 
 function Profile() {
   const { user } = useContext(AuthContext);
@@ -35,6 +36,9 @@ function Profile() {
       transition={{ duration: 0.6 }}
       className="min-h-screen bg-gray-100 dark:bg-gray-900 pb-10"
     >
+      <Helmet>
+              <title>AetherVoult | Profile</title>
+            </Helmet>
       {/* Header */}
       <div className="relative h-56 bg-gradient-to-r from-indigo-700 to-purple-700 rounded-b-3xl shadow-lg">
         <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">

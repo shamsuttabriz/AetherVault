@@ -3,7 +3,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
 import { AuthContext } from "../contexts/AuthContext";
-import {useNavigate} from "react-router"
+import { useNavigate } from "react-router";
+import { Helmet } from "react-helmet-async";
 
 const AddArtifacts = () => {
   const navigate = useNavigate();
@@ -26,8 +27,8 @@ const AddArtifacts = () => {
           title: "Good job",
           text: "Data Added Successfully",
           icon: "success",
-        })
-        navigate('/');
+        });
+        navigate("/");
       })
       .catch((err) => {
         console.log(err);
@@ -36,6 +37,9 @@ const AddArtifacts = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-6 mt-12 mb-20">
+      <Helmet>
+        <title>AetherVoult | Add-Artifact</title>
+      </Helmet>
       {/* Heading and Description */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}

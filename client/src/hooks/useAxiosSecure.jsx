@@ -12,7 +12,7 @@ function useAxiosSecure() {
   const token = user?.accessToken;
 
   axiosInstance.interceptors.request.use((config) => {
-    config.headers.Authorization = `Bearer dlkfd${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
   });
 
