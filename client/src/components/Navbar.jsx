@@ -3,7 +3,7 @@ import { Link, NavLink, useNavigate } from "react-router";
 import { AuthContext } from "../contexts/AuthContext";
 
 function Navbar() {
-  const { user, logOutUser } = use(AuthContext);
+  const { user, logOut } = use(AuthContext);
   const navigate = useNavigate();
   // console.log(user?.photoURL);
 
@@ -55,7 +55,7 @@ function Navbar() {
   );
 
   const handleLogout = () => {
-    logOutUser();
+    logOut();
     navigate("/");
   };
 
