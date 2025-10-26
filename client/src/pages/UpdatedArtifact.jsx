@@ -42,7 +42,7 @@ const UpdatedArtifact = () => {
             showConfirmButton: false,
             timer: 1500,
           });
-          navigate(`/my-artifacts/${email}`);
+          navigate(`/my-artifacts`);
         }
       })
       .catch((err) => {

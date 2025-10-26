@@ -1,4 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap');
+
 @import "tailwindcss";
 @plugin "daisyui" {
   themes: light --default;
+}
+
+.font-cinzel {
+  font-family: "Cinzel Decorative", serif;
+  font-weight: 900;
+  font-style: normal;
 }

@@ -1,7 +1,6 @@
 import React, { use, useEffect, useState } from "react";
 import { Link } from "react-router";
 import { AuthContext } from "../contexts/AuthContext";
-// import { useLoaderData } from "react-router";
 import Loading from "../components/Loading";
 import { motion } from "framer-motion";
 import Swal from "sweetalert2";
@@ -22,11 +21,11 @@ const MyArtifacts = () => {
   }, []);
 
   useEffect(() => {
-    axiosSecure(`/my-artifacts/${user?.email}`)
+    axiosSecure(`/my-artifacts`)
       .then((data) => {
         console.log(data?.data);
         setMyArtifacts(data?.data);
-        setLoading(false)
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -42,6 +41,9 @@ const MyArtifacts = () => {
   if (myArtifacts.length === 0) {
     return (
       <div className="text-center mt-16 text-gray-600">
+        <Helmet>
+        <title>AetherVault | My-Artifacts</title>
+      </Helmet>
         <p className="text-xl font-semibold">
           You haven’t added any artifacts yet.
         </p>

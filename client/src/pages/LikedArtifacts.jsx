@@ -26,7 +26,7 @@ function LikedArtifacts() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <Helmet>
-        <title>AetherVoult | Liked-Artifacts</title>
+        <title>AetherVault | Liked-Artifacts</title>
       </Helmet>
       <motion.h1
         initial={{ opacity: 0, y: -30 }}

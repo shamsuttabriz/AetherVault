@@ -78,7 +78,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "my-artifacts/:email",
+        path: "my-artifacts",
         element: (
           <PrivateRoute>
             <MyArtifacts />

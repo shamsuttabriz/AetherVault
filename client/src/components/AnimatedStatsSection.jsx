@@ -46,7 +46,7 @@ const useCountUp = (end, duration = 2000) => {
 
 const AnimatedStatsSection = () => {
   return (
-    <div className="max-w-7xl mx-auto py-10">
+    <div className="max-w-7xl mx-auto pb-10">
       <motion.section
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}

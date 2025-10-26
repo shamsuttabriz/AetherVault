@@ -23,8 +23,10 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.ynehqwn.mongodb.net/?appName=Cluster0`;
+
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(process.env.MONGODB_URL, {
+const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -34,23 +36,23 @@ const client = new MongoClient(process.env.MONGODB_URL, {
 
 // JWT Middleware
 const verifyToken = async (req, res, next) => {
-  const token = req?.headers?.authorization?.split(" ")[1];
-  // console.log("Take Token: ", token);
-
-  if(!token) return res.status(401).send({message: "Unauthorized Access!"});
-
-  // verify token using firebase admin sdk
   try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).send({ message: "Unauthorized Access!" });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    // Verify Firebase ID Token
     const decoded = await admin.auth().verifyIdToken(token);
-    req.tokenEmail = decoded.email;
-    // console.log(decoded)
+    req.tokenEmail = decoded.email; // set email in request
     next();
-  }
-  catch (err) {
-    console.log(err)
+  } catch (err) {
+    console.error("JWT Verification Error:", err);
     return res.status(401).send({ message: "Unauthorized Access!" });
   }
-}
+};
 
 async function run() {
   try {
@@ -79,22 +81,18 @@ async function run() {
       res.status(201).send({ ...result, message: "Data Paichi vai, Thanks" });
     });
 
-    // Get artifact by individual user
-    app.get("/my-artifacts/:email", verifyToken, async (req, res) => {
-      const decodedToken = req.tokenEmail;
-      const email = req.params.email;
-
-      if(decodedToken !== email) {
-        return res.status(403).send({message: "Forbidden Access!"});
+    // Get artifacts by user email
+    app.get("/my-artifacts", verifyToken, async (req, res) => {
+      try {
+        const decodedEmail = req.tokenEmail;
+        const filter = { email: decodedEmail };
+        const myArtifacts = await artifactsCollection.find(filter).toArray();
+        res.send(myArtifacts);
+      } catch (error) {
+        console.error("Error fetching user artifacts:", error);
+        res.status(500).send({ message: "Server Error!" });
       }
-
-      const filter = { email };
-      const myArtifacts = await artifactsCollection.find(filter).toArray();
-      // console.log(myArtifacts);
-      res.send(myArtifacts);
     });
-
-    app.get("/artifacs");
 
     // saved a updated artifact in database through the put request
     app.put("/updated-artifact/:id", async (req, res) => {

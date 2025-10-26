@@ -25,9 +25,9 @@ function Profile() {
       icon: "warning",
       title: "I didn’t get time to do it.",
       showConfirmButton: false,
-      timer: 3000
+      timer: 3000,
     });
-  }
+  };
 
   return (
     <motion.div
@@ -37,8 +37,8 @@ function Profile() {
       className="min-h-screen bg-gray-100 dark:bg-gray-900 pb-10"
     >
       <Helmet>
-              <title>AetherVoult | Profile</title>
-            </Helmet>
+        <title>AetherVoult | Profile</title>
+      </Helmet>
       {/* Header */}
       <div className="relative h-56 bg-gradient-to-r from-indigo-700 to-purple-700 rounded-b-3xl shadow-lg">
         <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
@@ -55,8 +55,12 @@ function Profile() {
         <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
           {profileData.name}
         </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-300">{profileData.email}</p>
-        <p className="mt-3 text-gray-700 dark:text-gray-200">{profileData.bio}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-300">
+          {profileData.email}
+        </p>
+        <p className="mt-3 text-gray-700 dark:text-gray-200">
+          {profileData.bio}
+        </p>
       </div>
 
       {/* Stats */}
@@ -92,7 +96,10 @@ function Profile() {
 
       {/* Footer Buttons */}
       <div className="mt-10 text-center">
-        <button onClick={handleEdit} className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full shadow transition">
+        <button
+          onClick={handleEdit}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full shadow transition"
+        >
           Edit Profile
         </button>
       </div>

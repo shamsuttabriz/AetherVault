@@ -2,30 +2,33 @@ import React, { useEffect, useState } from "react";
 import { useLoaderData } from "react-router";
 import ArtifactCard from "../components/ArtifactCard";
 import { motion } from "framer-motion";
-import axios from "axios";
 import { Helmet } from "react-helmet-async";
 
 function AllArtifacts() {
   const { data } = useLoaderData();
   const [searchText, setSearchText] = useState("");
-  const [artifacts, setArtifacts] = useState();
+  const [artifacts, setArtifacts] = useState([]);
   const [filteredArtifacts, setFilteredArtifacts] = useState([]);
 
+  // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Set initial data safely
   useEffect(() => {
-    setArtifacts(data);
-    setFilteredArtifacts(data);
+    const safeData = Array.isArray(data) ? data : [];
+    setArtifacts(safeData);
+    setFilteredArtifacts(safeData);
   }, [data]);
 
+  // Search handler
   const handleSearch = (e) => {
     const text = e.target.value.toLowerCase();
     setSearchText(text);
 
-    const filtered = artifacts.filter((artifact) =>
-      artifact.name.toLowerCase().includes(text)
+    const filtered = artifacts.filter(
+      (artifact) => artifact.name && artifact.name.toLowerCase().includes(text)
     );
 
     setFilteredArtifacts(filtered);
@@ -34,8 +37,9 @@ function AllArtifacts() {
   return (
     <div className="max-w-7xl mx-auto mb-10">
       <Helmet>
-        <title>AetherVoult | All-Artifacts</title>
+        <title>AetherVault | All-Artifacts</title>
       </Helmet>
+
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -78,11 +82,21 @@ function AllArtifacts() {
             </div>
           </div>
         </div>
+
         {/* All Artifacts Data */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
-          {filteredArtifacts.map((artifact) => (
-            <ArtifactCard key={artifact._id} artifact={artifact} />
-          ))}
+          {Array.isArray(filteredArtifacts) && filteredArtifacts.length > 0 ? (
+            filteredArtifacts.map((artifact) => (
+              <ArtifactCard
+                key={artifact._id || artifact.name}
+                artifact={artifact}
+              />
+            ))
+          ) : (
+            <p className="text-center text-gray-500 col-span-full mt-10">
+              No artifacts found.
+            </p>
+          )}
         </div>
       </div>
     </div>

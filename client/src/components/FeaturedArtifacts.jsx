@@ -14,77 +14,10 @@ const fadeInUp = {
 const FeaturedArtifacts = () => {
   const navigate = useNavigate();
   const data = useLoaderData();
-  const artifacts = data?.data;
-
-  // const artifacts = [
-  //   {
-  //     id: "1",
-  //     name: "Rosetta Stone",
-  //     description:
-  //       "A granodiorite stele inscribed with three versions of a decree issued in Memphis, Egypt.",
-  //     image: "https://i.ibb.co/RTc7X1rn/1.jpg",
-  //     likeCount: 89,
-  //   },
-  //   {
-  //     id: "2",
-  //     name: "Terracotta Army",
-  //     description:
-  //       "Thousands of life-sized clay soldiers buried with China's first emperor to guard him in the afterlife.",
-  //     image: "https://i.ibb.co/RTc7X1rn/1.jpg",
-  //     likeCount: 132,
-  //   },
-  //   {
-  //     id: "3",
-  //     name: "Antikythera Mechanism",
-  //     description:
-  //       "An ancient Greek analog computer used to predict astronomical positions and eclipses.",
-  //     image: "https://i.ibb.co/RTc7X1rn/1.jpg",
-  //     likeCount: 97,
-  //   },
-  //   {
-  //     id: "4",
-  //     name: "Dead Sea Scrolls",
-  //     description:
-  //       "Ancient Jewish texts discovered near the Dead Sea, dating back over 2000 years.",
-  //     image: "https://i.ibb.co/RTc7X1rn/1.jpg",
-  //     likeCount: 76,
-  //   },
-  //   {
-  //     id: "5",
-  //     name: "Sutton Hoo Helmet",
-  //     description:
-  //       "An ornate Anglo-Saxon helmet found in a ship burial in England.",
-  //     image: "https://i.ibb.co/RTc7X1rn/1.jpg",
-  //     likeCount: 64,
-  //   },
-  //   {
-  //     id: "6",
-  //     name: "Bust of Nefertiti",
-  //     description:
-  //       "A painted stucco-coated limestone bust of Nefertiti, the Great Royal Wife of Egyptian Pharaoh Akhenaten.",
-  //     image: "https://i.ibb.co/RTc7X1rn/1.jpg",
-  //     likeCount: 104,
-  //   },
-  //   {
-  //     id: "7",
-  //     name: "Mohenjo-daro Dancing Girl",
-  //     description:
-  //       "A bronze statue of a young girl in a pose of dance, dating back to the Indus Valley Civilization.",
-  //     image: "https://i.ibb.co/RTc7X1rn/1.jpg",
-  //     likeCount: 88,
-  //   },
-  //   {
-  //     id: "8",
-  //     name: "Venus of Willendorf",
-  //     description:
-  //       "A small Paleolithic figurine of a woman believed to be linked with fertility rituals.",
-  //     image: "https://i.ibb.co/RTc7X1rn/1.jpg",
-  //     likeCount: 71,
-  //   },
-  // ];
+  const artifacts = Array.isArray(data?.data) ? data.data : []; // ✅ Safe array check
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10">
+    <div className="max-w-7xl mx-auto px-4 md:px-0 py-10">
       {/* Title Section with Animation */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -106,7 +39,7 @@ const FeaturedArtifacts = () => {
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {artifacts.slice(0, 6).map((artifact, index) => (
           <motion.div
-            key={artifact._id}
+            key={artifact._id || index}
             custom={index}
             variants={fadeInUp}
             initial="hidden"
@@ -116,22 +49,25 @@ const FeaturedArtifacts = () => {
             className="bg-indigo-50 rounded-xl shadow-md p-5 flex flex-col cursor-pointer"
           >
             <img
-              src={artifact.image}
-              alt={artifact.name}
+              src={artifact.image || ""}
+              alt={artifact.name || "Artifact"}
               className="rounded-lg h-48 w-full object-cover mb-4"
             />
             <h3 className="text-xl font-semibold text-indigo-700">
-              {artifact.name}
+              {artifact.name || "Unknown Artifact"}
             </h3>
             <p className="text-sm text-gray-600 my-2">
-              {artifact.description.slice(0, 80)}...
+              {artifact.description
+                ? artifact.description.slice(0, 80)
+                : "No description available"}
+              ...
             </p>
             <div className="mt-auto flex items-center justify-between">
               <span className="text-sm font-bold text-gray-700">
-                Created: {artifact.createdAt}
+                Created: {artifact.createdAt || "Unknown"}
               </span>
               <Link
-                to={`/artifact-detail/${artifact._id}`}
+                to={`/artifact-detail/${artifact._id || ""}`}
                 className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded text-sm hover:from-indigo-700 hover:to-purple-700 cursor-pointer px-3 py-1 transition"
               >
                 View Details

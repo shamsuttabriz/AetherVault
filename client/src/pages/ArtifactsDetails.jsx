@@ -47,7 +47,7 @@ const ArtifactDetails = () => {
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
       <Helmet>
-        <title>AetherVoult | Artifact-Details</title>
+        <title>AetherVault | Artifact-Details</title>
       </Helmet>
       {/* Page Heading */}
       <motion.div
@@ -68,7 +68,7 @@ const ArtifactDetails = () => {
       {/* Back Link */}
       <div className="mb-6">
         <Link
-          to="/"
+          to="/all-artifacts"
           className="text-indigo-600 hover:underline text-sm font-semibold"
         >
           ← Back to Artifacts
